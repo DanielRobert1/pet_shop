@@ -19,6 +19,16 @@ class UserRepository extends EloquentRepository implements UserRepositoryContrac
     }
 
     /**
+     * @param string $email
+     * @return ?User
+     */
+    final public function getByEmail(string $email): ?User
+    {
+        return $this->newQuery()
+            ->where('email', $email)->first();
+    }
+
+    /**
      * @param int $user_id
      * @param array $with
      * @return User
@@ -119,7 +129,7 @@ class UserRepository extends EloquentRepository implements UserRepositoryContrac
                 foreach ($queryArray as $item) {
                     $builder->orWhere('first_name', 'like', '%'.$item.'%')
                         ->orWhere('last_name', 'like', '%'.$item.'%')
-                        ->orWhere('phone', 'like', '%'.$item.'%')
+                        ->orWhere('phone_number', 'like', '%'.$item.'%')
                         ->orWhere('email', 'like', '%'.$item.'%');
                 }
 

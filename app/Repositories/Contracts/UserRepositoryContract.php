@@ -19,6 +19,12 @@ interface UserRepositoryContract
     public function getById(int $user_id, $rel = []): User;
 
     /**
+     * @param string $email
+     * @return ?User
+     */
+    public function getByEmail(string $email): ?User;
+
+    /**
      * @param array $user_ids
      * @param array $with
      * @return Collection|User[]

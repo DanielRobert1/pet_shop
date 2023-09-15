@@ -8,10 +8,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable implements JWTSubject
 {
-    use HasUuids, HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are not mass assignable.
@@ -20,6 +21,7 @@ class User extends Authenticatable implements JWTSubject
      */
     protected $guarded = [
         'id',
+        'uuid',
         'created_at',
         'updated_at',
     ];
@@ -51,7 +53,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function getJWTIdentifier()
     {
-        return $this->getKey();
+        return $this->uuid;
     }
 
     /**
@@ -63,5 +65,13 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
         ];
+    }
+
+    public static function boot() {
+        parent::boot();
+
+        static::creating(function($item) {
+            $item->uuid = Str::orderedUuid();
+        });
     }
 }
